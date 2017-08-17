@@ -57,6 +57,43 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         //googleApiClient.connect();
     }
 
+
+    public void onResume(){
+        super.onResume();
+
+        if(googleApiClient !=null && googleApiClient.isConnected()){
+            startLocationUpdate();
+        }
+    }
+
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        if(googleApiClient != null){
+            stopLocationUpdate();
+        }
+    }
+
+    private void initLocationRequest(){
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+
+    private void startLocationUpdate(){
+        initLocationRequest();
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+    }
+
+
+    private void stopLocationUpdate(){
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
