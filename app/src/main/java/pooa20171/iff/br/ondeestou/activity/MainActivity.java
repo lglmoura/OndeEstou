@@ -1,4 +1,4 @@
-package pooa20171.iff.br.ondeestou;
+package pooa20171.iff.br.ondeestou.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import pooa20171.iff.br.ondeestou.R;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         try {
 
-            Class obj = Class.forName ("pooa20171.iff.br.exemplolocalizacao.activity."+activities[position]);
+            Class obj = Class.forName ("pooa20171.iff.br.ondeestou.activity."+activities[position]);
 
 
             intent = new Intent(this, obj);
