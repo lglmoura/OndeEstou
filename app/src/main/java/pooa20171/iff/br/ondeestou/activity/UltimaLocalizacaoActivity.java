@@ -52,6 +52,15 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
     private TextView tvPresicao;
     private TextView tvHora;
 
+    private TextView tvRua;
+    private TextView tvCidade;
+    private TextView tvEstado;
+    private TextView tvPais;
+    private TextView tvCompleto;
+
+
+    private Address endereco;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,12 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         tvVelocidade = (TextView) findViewById(R.id.tvVelocidade);
         tvProvedor = (TextView) findViewById(R.id.tvProvedor);
         tvHora = (TextView) findViewById(R.id.tvHora);
+
+        tvCidade = (TextView) findViewById(R.id.tvCidade);
+        tvEstado = (TextView) findViewById(R.id.tvEstado);
+        tvPais = (TextView) findViewById(R.id.tvPais);
+        tvRua = (TextView) findViewById(R.id.tvRua);
+        tvCompleto = (TextView) findViewById(R.id.tvCompleto);
 
         callConnection();
         PermissionUtils.validate(this, 0, permissoes);
@@ -169,6 +184,27 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         tvProvedor.setText("Provider: " + location.getProvider());
         tvPresicao.setText("Accuracy: " + location.getAccuracy());
         tvHora.setText("Speed: " + DateFormat.getTimeInstance().format(new Date()));
+
+        try {
+            endereco = getEndereco(latPoint,lngPoint);
+            Log.i("LOG","Atualizar "+endereco.getThoroughfare());
+
+            for(int i = 0, tam = endereco.getMaxAddressLineIndex(); i < tam; i++){
+                resultAddress += endereco.getAddressLine(i);
+                resultAddress += i < tam - 1 ? ", " : "";
+            }
+            tvRua.setText("Rua: "+endereco.getThoroughfare());
+
+            tvCidade.setText("Cidade: "+endereco.getLocality());
+            tvEstado.setText("Estado: "+endereco.getAdminArea());
+            tvPais.setText("Pais:"+endereco.getCountryName());
+            tvCompleto.setText("Completo: "+resultAddress);
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
