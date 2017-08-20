@@ -1,10 +1,14 @@
 package pooa20171.iff.br.ondeestou.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -15,10 +19,19 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import pooa20171.iff.br.ondeestou.R;
+import pooa20171.iff.br.ondeestou.util.PermissionUtils;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class UltimaLocalizacaoActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
+    String[] permissoes = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+    };
 
 
     private GoogleApiClient googleApiClient;
@@ -33,7 +46,6 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
     private TextView tvHora;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +57,11 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         tvVelocidade = (TextView) findViewById(R.id.tvVelocidade);
         tvProvedor = (TextView) findViewById(R.id.tvProvedor);
         tvHora = (TextView) findViewById(R.id.tvHora);
+
+        callConnection();
+        PermissionUtils.validate(this, 0, permissoes);
+
+        googleApiClient.connect();
     }
 
     private synchronized void callConnection() {
@@ -54,38 +71,49 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
-        //googleApiClient.connect();
+
     }
 
+    private void pedirPermissoes() {
 
-    public void onResume(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else
+            googleApiClient.connect();
+    }
+
+    @RequiresPermission(allOf = {ACCESS_COARSE_LOCATION , ACCESS_FINE_LOCATION})
+    public void onResume() {
         super.onResume();
 
-        if(googleApiClient !=null && googleApiClient.isConnected()){
+        if (googleApiClient != null && googleApiClient.isConnected())
             startLocationUpdate();
-        }
+
     }
 
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
 
-        if(googleApiClient != null){
+        if (googleApiClient != null) {
             stopLocationUpdate();
         }
     }
 
-    private void initLocationRequest(){
+    private void initLocationRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-
+    @RequiresPermission(allOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     private void startLocationUpdate(){
         initLocationRequest();
+
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }
 
@@ -95,17 +123,27 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
     }
 
     @Override
+    @RequiresPermission(allOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void onConnected(@Nullable Bundle bundle) {
+        Log.i("LOG", "UpdateLocationActivity.onConnected(" + bundle + ")");
+
+        Location l = LocationServices
+                .FusedLocationApi
+                .getLastLocation(googleApiClient); // PARA JÁ TER UMA COORDENADA PARA O UPDATE FEATURE UTILIZAR
+
+        startLocationUpdate();
 
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        Log.i("LOG", "UpdateLocationActivity.onConnectionSuspended(" + i + ")");
 
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i("LOG", "UpdateLocationActivity.onConnectionFailed(" + connectionResult + ")");
 
     }
 
