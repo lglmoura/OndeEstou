@@ -80,8 +80,11 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         tvRua = (TextView) findViewById(R.id.tvRua);
         tvCompleto = (TextView) findViewById(R.id.tvCompleto);
 
+
+
         callConnection();
-        PermissionUtils.validate(this, 0, permissoes);
+        PermissionUtils.validate(this, permissoes);
+
 
         googleApiClient.connect();
     }
@@ -132,7 +135,7 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    @RequiresPermission(allOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
+
     private void startLocationUpdate(){
         initLocationRequest();
 
@@ -145,7 +148,7 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
     }
 
     @Override
-    @RequiresPermission(allOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
+
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("LOG", "UpdateLocationActivity.onConnected(" + bundle + ")");
 
@@ -183,7 +186,7 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         tvVelocidade.setText("Velocidade: " + location.getSpeed());
         tvProvedor.setText("Provider: " + location.getProvider());
         tvPresicao.setText("Accuracy: " + location.getAccuracy());
-        tvHora.setText("Speed: " + DateFormat.getTimeInstance().format(new Date()));
+        tvHora.setText("Hora stusl : " + DateFormat.getTimeInstance().format(new Date()));
 
         try {
             endereco = getEndereco(latPoint,lngPoint);
@@ -192,6 +195,7 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
             for(int i = 0, tam = endereco.getMaxAddressLineIndex(); i < tam; i++){
                 resultAddress += endereco.getAddressLine(i);
                 resultAddress += i < tam - 1 ? ", " : "";
+                Log.i("LOG","Result "+resultAddress);
             }
             tvRua.setText("Rua: "+endereco.getThoroughfare());
 

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PermissionUtils {
 
-    public static boolean validate(Activity activity, int requestCode, String... permissions) {
+    public static boolean validate(Activity activity, String... permissions) {
         List<String> list = new ArrayList<String>();
         for (String permission : permissions) {
             // Valida permissão

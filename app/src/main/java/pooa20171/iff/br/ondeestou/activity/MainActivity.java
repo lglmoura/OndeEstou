@@ -12,7 +12,7 @@ import pooa20171.iff.br.ondeestou.R;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private String[] activities = {"UltimaLocalizacaoActivity" };
+    private String[] activities = {"UltimaLocalizacaoActivity", "LocalizaActivity" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
