@@ -78,7 +78,7 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
         tvEstado = (TextView) findViewById(R.id.tvEstado);
         tvPais = (TextView) findViewById(R.id.tvPais);
         tvRua = (TextView) findViewById(R.id.tvRua);
-        tvCompleto = (TextView) findViewById(R.id.tvCompleto);
+        tvCompleto = (TextView) findViewById(R.id.lbEndereco);
 
 
 
