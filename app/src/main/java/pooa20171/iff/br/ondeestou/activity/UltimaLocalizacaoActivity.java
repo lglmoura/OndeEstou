@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,9 +26,6 @@ import java.util.List;
 
 import pooa20171.iff.br.ondeestou.R;
 import pooa20171.iff.br.ondeestou.util.PermissionUtils;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class UltimaLocalizacaoActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -109,7 +105,7 @@ public class UltimaLocalizacaoActivity extends AppCompatActivity implements Goog
             googleApiClient.connect();
     }
 
-    @RequiresPermission(allOf = {ACCESS_COARSE_LOCATION , ACCESS_FINE_LOCATION})
+
     public void onResume() {
         super.onResume();
 
